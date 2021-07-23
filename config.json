@@ -1,0 +1,16 @@
+{
+    "Common": {
+        "num_robots" : 2,
+        "color": "yellow",
+        "friend_1_ray" : 150,
+        "friend_2_ray" : 150,
+        "enemy_ray"    : 150
+    },
+
+    "Myself": {
+        "name" : "robot_1"
+    }
+
+
+
+}
