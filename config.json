@@ -1,5 +1,6 @@
 {
     "Common": {
+        "simulate_LL" : "True",
         "num_robots" : 2,
         "color": "yellow",
         "friend_1_ray" : 150,
@@ -9,6 +10,10 @@
 
     "Myself": {
         "name" : "robot_1"
+    },
+
+    "Match": {
+        "homologation" : "True"
     }
 
 

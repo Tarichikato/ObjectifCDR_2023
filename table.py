@@ -19,7 +19,6 @@ class Table():
     def keep_table_updated(self,delay):
         while True:
             self.update_table()
-            print("Table Updated")
             #print(self.bd)
             time.sleep(delay)
 

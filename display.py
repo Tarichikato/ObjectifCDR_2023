@@ -5,7 +5,7 @@ import get_config as config
 
 
 def show(table):
-    img = imread('data/fondTable21.jpg')
+    img = imread('../data/fondTable21.jpg')
     fig, ax = plt.subplots(1)
     ax.set_aspect('equal')
 

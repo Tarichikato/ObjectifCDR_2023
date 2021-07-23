@@ -10,8 +10,7 @@ if __name__ == '__main__':
 
     match = Match(table, robot)
 
-    while True:
-        display.show(table)
+    match.execute_script()
 
 
 
