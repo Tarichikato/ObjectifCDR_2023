@@ -2,19 +2,23 @@
 from table import Table
 from robot import Robot
 from match import Match
-from simulate_LL import init_simulated_LL
-import display as display
+import _thread
+from simulate_LL import SimulatedLL
+import display
 
 if __name__ == '__main__':
     table = Table()
     robot = Robot()
-    init_simulated_LL()
+    ll = SimulatedLL()
+
+
 
     match = Match(table, robot)
 
-    match.execute_script()
-    while True:
-        pass
+    _thread.start_new_thread(match.execute_script, ())
+
+    display.stream_table(table)
+
 
 
 

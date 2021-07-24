@@ -13,6 +13,7 @@ class Table():
         self.graph = self.build_graph()
         self.bd  = self.get_balise_data()
         self.cam = self.get_camera_data()
+        self.codeuses = self.get_codeuses_data()
 
         _thread.start_new_thread(self.keep_table_updated, (0.1,))
 
@@ -27,6 +28,7 @@ class Table():
         self.lidar = lidar.get_map()
         self.cam = self.get_camera_data()
         self.graph = self.update_graph()
+        self.codeuses = self.get_codeuses_data()
 
 
     def get_balise_data(self):
@@ -46,7 +48,13 @@ class Table():
         cam = c.get_data()
         return(cam)
 
-
+    def get_codeuses_data(self):
+        f = open("data/HLtoLL_codeuses.txt", "r")
+        codeuses = f.read()
+        data = codeuses.split("_")
+        if(len(data)!=4):
+            return(self.codeuses)
+        return(int(float(data[1])),int(float(data[3])))
 
     def scale(self,shape, position):
         return (int(position[0] / 3000 * shape[1]), int(position[1] / 2000 * shape[0]))
