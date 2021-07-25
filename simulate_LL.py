@@ -13,9 +13,15 @@ class SimulatedLL():
         f = open("data/LLtoHL_move.txt", "w")
         f.write("")
         f.close()
+        f = open("data/HLtoLL_info.txt", "w")
+        f.write("")
+        f.close()
+        f = open("data/LLtoHL_info.txt", "w")
+        f.write("")
+        f.close()
         _thread.start_new_thread(self.listen_HL_move, (3,))
         # _thread.start_new_thread(self.listen_HL_actions, (3,))
-        # _thread.start_new_thread(self.listen_HL_infos, (3,))
+        _thread.start_new_thread(self.listen_HL_infos, (3,))
         _thread.start_new_thread(self.tell_HL_codeuses, (0.1,))
 
     def listen_HL_move(self,delay):
@@ -50,21 +56,25 @@ class SimulatedLL():
     def listen_HL_infos(self,delay):
         l = 0
         while True:
-            f = open("data/HLtoLL_move.txt", "r")
+            f = open("data/HLtoLL_info.txt", "r")
             message = f.readlines()
             f.close()
             if(l != len(message)):
-                time.sleep(delay)
                 l = len(message)
-                f = open("data/LLtoHL_move.txt", "a")
-                print("le LL renvoie {}".format(message[-1]))
-                f.write(message[-1])
+                last_message = message[-1]
+
+                if(last_message.split('_')[0] == "init-codeuses"):
+                    self.init_codeuses(last_message)
+
+                f = open("data/LLtoHL_info.txt", "a")
+                print("le LL renvoie {}".format(last_message))
+                f.write(last_message)
                 f.close
 
     def tell_HL_codeuses(self,delay):
         while True:
             f = open("data/HLtoLL_codeuses.txt", "w")
-            f.write("x_{}_y_{}".format(self.x,self.y))
+            f.write("x_{}_y_{}_o_{}".format(self.x,self.y,self.orientation))
             f.close()
             time.sleep(delay)
 
@@ -81,4 +91,11 @@ class SimulatedLL():
 
         if (m[0] == "tt"):
             self.orientation = float(m[1])
+
+
+    def init_codeuses(self,last_message):
+        last_message = last_message.split('_')
+        self.x = int(float(last_message[2]))
+        self.y = int(float(last_message[4]))
+        self.orientation = float(last_message[6])
 

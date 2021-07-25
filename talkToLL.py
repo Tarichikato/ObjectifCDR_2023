@@ -4,45 +4,54 @@ import time
 #GET DATA
 
 def get_position_odometrie():
-    #print('je demande ma position au LL selon les codeuses')
-    #Todo Com LL
-    position = None
-    return(position)
+    f = open("data/HLtoLL_codeuses.txt", "r")
+    codeuses = f.read()
+    f.close()
+    data = codeuses.split("_")
+    return(data)
 
 #MOVE ORDERS
 
-def av(l):
-    if(gc.is_ll_simulated()):
-        f = open("data/LLtoHL_move.txt", "r")
-        id = len(f.readlines())
-        f = open("data/HLtoLL_move.txt", "a")
-        print("Le HL envoie {}".format("av_{}\n".format(l)))
-        f.write("av_{}\n".format(l))
-        f.close
-        for k in range (100):
-            f = open("data/LLtoHL_move.txt", "r")
-            message = f.readlines()
-            if("av_{}\n".format(l) in message[id:]):
-                f.close()
-                print("le HL a bien recu {}".format("av_{}\n".format(l)))
-                return(0)
+def initiate_codeuses(x,y,o):
+    f = open("data/LLtoHL_info.txt", "r")
+    id = len(f.readlines())
+    f.close
+    f = open("data/HLtoLL_info.txt", "a")
+    f.write('init-codeuses_x_{}_y_{}_o_{}\n'.format(x,y,o))
+    f.close
+    print("Le HL envoie {}".format('init-codeuses_x_{}_y_{}_o_{}\n'.format(x,y,o)))
+    for k in range(20):
+        f = open("data/LLtoHL_info.txt", "r")
+        message = f.readlines()
+        if ('init-codeuses_x_{}_y_{}_o_{}\n'.format(x,y,o) in message[id:]):
             f.close()
-            time.sleep(0.5)
+            print("le HL a bien recu {}".format('init-codeuses_x_{}_y_{}_o_{}'.format(x,y,o)))
+            return (0)
+        f.close()
+        time.sleep(0.5)
+
+
+def av(l):
+    send('av',l)
 
 def tt(o):
+    send('tt',o)
+
+def send(order,a):
     if (gc.is_ll_simulated()):
         f = open("data/LLtoHL_move.txt", "r")
         id = len(f.readlines())
-        f = open("data/HLtoLL_move.txt", "a")
-        print("Le HL envoie {}".format("tt_{}\n".format(o)))
-        f.write("tt_{}\n".format(o))
         f.close
-        for k in range(100):
+        f = open("data/HLtoLL_move.txt", "a")
+        print("Le HL envoie {}".format("{}_{}\n".format(order,a)))
+        f.write("{}_{}\n".format(order,a))
+        f.close
+        for k in range(20):
             f = open("data/LLtoHL_move.txt", "r")
             message = f.readlines()
-            if ("tt_{}\n".format(o) in message[id:]):
+            if ("{}_{}\n".format(order,a) in message[id:]):
                 f.close()
-                print("le HL a bien recu {}".format("tt_{}\n".format(o)))
+                print("le HL a bien recu {}".format("{}_{}\n".format(order,a)))
                 return (0)
             f.close()
             time.sleep(0.5)

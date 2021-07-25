@@ -1,5 +1,5 @@
 
-
+import talkToLL as ll
 import balise as b
 import camera as c
 import get_config as config
@@ -49,12 +49,10 @@ class Table():
         return(cam)
 
     def get_codeuses_data(self):
-        f = open("data/HLtoLL_codeuses.txt", "r")
-        codeuses = f.read()
-        data = codeuses.split("_")
-        if(len(data)!=4):
+        data = ll.get_position_odometrie()
+        if(len(data)!=6):
             return(self.codeuses)
-        return(int(float(data[1])),int(float(data[3])))
+        return(int(float(data[1])),int(float(data[3])),int(float(data[5])))
 
     def scale(self,shape, position):
         return (int(position[0] / 3000 * shape[1]), int(position[1] / 2000 * shape[0]))
