@@ -52,7 +52,7 @@ class Table():
         data = ll.get_position_odometrie()
         if(len(data)!=6):
             return(self.codeuses)
-        return(int(float(data[1])),int(float(data[3])),int(float(data[5])))
+        return(int(float(data[1])),int(float(data[3])),float(data[5]))
 
     def scale(self,shape, position):
         return (int(position[0] / 3000 * shape[1]), int(position[1] / 2000 * shape[0]))

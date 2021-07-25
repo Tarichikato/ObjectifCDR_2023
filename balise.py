@@ -7,7 +7,7 @@ import time
 #Bon là c'est en dur
 def get_robots_center():
     #TODO Appel à la camera de la balise
-    robots_center = {'blue_1': (300,200), 'blue_2': (1500,600), 'yellow_1': (2500,400), 'yellow_2': (500,1500)}
+    robots_center = {'blue_1': None, 'blue_2':None, 'yellow_1': (2500,400), 'yellow_2': None}
     return(robots_center)
 
 def view():
