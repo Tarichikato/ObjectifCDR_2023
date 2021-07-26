@@ -8,7 +8,4 @@ class Match():
 
 
     def execute_script(self):
-        if(gc.is_homologation()):
-            print("Debut du match en homologation")
-            scripts.homologation()
-            print("fin de l homologation")
+        scripts.execute_script()

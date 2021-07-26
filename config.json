@@ -5,7 +5,8 @@
         "color": "yellow",
         "friend_1_ray" : 150,
         "friend_2_ray" : 150,
-        "enemy_ray"    : 150
+        "enemy_ray"    : 150,
+        "scripts_dir"  : "scripts"
     },
 
     "Myself": {
@@ -13,7 +14,9 @@
     },
 
     "Match": {
-        "homologation" : "True"
+        "homologation" : "True",
+        "homologation_script" : "homologation.txt",
+        "match_script" : "principal.txt"
     }
 
 

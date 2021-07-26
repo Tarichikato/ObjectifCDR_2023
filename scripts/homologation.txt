@@ -1,0 +1,8 @@
+init-position_x_300_y_510_o_0
+av_2000
+tt_pi
+av_1000
+tt_pi/2
+av_-500
+tt_-pi/2
+wait_2

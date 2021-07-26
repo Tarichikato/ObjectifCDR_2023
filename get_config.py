@@ -16,7 +16,7 @@ def get_num_robots():
 
 def get_name():
     if(get_num_robots() == 2):
-        with open(dir+"config.json") as json_data_file:
+        with open("config.json") as json_data_file:
             data = json.load(json_data_file)
             name = data['Myself']['name']
     else:
@@ -25,7 +25,7 @@ def get_name():
 
 
 def is_homologation():
-    with open(dir+"config.json") as json_data_file:
+    with open("config.json") as json_data_file:
         data = json.load(json_data_file)
         homologation = data['Match']['homologation']
     if (homologation == 'True'):
@@ -33,11 +33,21 @@ def is_homologation():
     return False
 
 def is_ll_simulated():
-    with open(dir+"config.json") as json_data_file:
+    with open("config.json") as json_data_file:
         data = json.load(json_data_file)
         simulation = data['Common']['simulate_LL']
     if (simulation == 'True'):
         return True
     return(False)
+
+def get_script():
+    with open("config.json") as json_data_file:
+        data = json.load(json_data_file)
+        dir  = data['Common']['scripts_dir']
+        if (is_homologation()):
+            file = data['Match']['homologation_script']
+            return ("{}/{}".format(dir, file))
+        file = data['Match']['script']
+        return("{}/{}".format(dir,file))
 
 

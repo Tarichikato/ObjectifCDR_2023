@@ -13,6 +13,7 @@ class Table():
         self.graph = self.build_graph()
         self.bd  = self.get_balise_data()
         self.cam = self.get_camera_data()
+        self.codeuses = (0, 0, 0)
         self.codeuses = self.get_codeuses_data()
 
         _thread.start_new_thread(self.keep_table_updated, (0.1,))
