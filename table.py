@@ -3,15 +3,17 @@ import talkToLL as ll
 import balise as b
 import camera as c
 import get_config as config
-import lidar as lidar
-
+import lidar
+import graph as g
 import _thread
 import time
 
 class Table():
     def __init__(self):
         self.graph = self.build_graph()
-        self.bd  = self.get_balise_data()
+        print(self.graph)
+        g.find_shortest_path('250,1250', '1250,1250',self.graph)
+        self.bd = self.get_balise_data()
         self.cam = self.get_camera_data()
         self.codeuses = (0, 0, 0)
         self.codeuses = self.get_codeuses_data()
@@ -53,7 +55,7 @@ class Table():
         data = ll.get_position_odometrie()
         if(len(data)!=6):
             return(self.codeuses)
-        return(int(float(data[1])),int(float(data[3])),float(data[5]))
+        return(float(data[1]),float(data[3]),float(data[5]))
 
     def scale(self,shape, position):
         return (int(position[0] / 3000 * shape[1]), int(position[1] / 2000 * shape[0]))
@@ -70,7 +72,7 @@ class Table():
         return (map)
 
     def build_graph(self):
-        graph = None
+        graph = g.init_graph()
         return (graph)
 
     def get_elements(self):

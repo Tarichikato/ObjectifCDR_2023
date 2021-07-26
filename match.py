@@ -8,4 +8,4 @@ class Match():
 
 
     def execute_script(self):
-        scripts.execute_script()
+        scripts.execute_script(self.table)

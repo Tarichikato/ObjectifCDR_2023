@@ -1,20 +1,22 @@
 import mouvements as mouvements
 import math
+import numpy as np
 import time
 import talkToLL as ll
 import get_config as gc
+import graph as graph
+from scipy.spatial import distance
 
 
-
-def execute_script():
+def execute_script(table):
     script = gc.get_script()
     f = open(script, "r")
     script = f.readlines()
     f.close()
     for instruction in script:
-        translate_and_send(instruction)
+        translate_and_send(instruction,table)
 
-def translate_and_send(instruction):
+def translate_and_send(instruction,table):
     instruction = instruction.split('_')
     instruction[-1] = instruction[-1].replace('\n',"")
     if(instruction[0] == "init-position"):
@@ -28,14 +30,18 @@ def translate_and_send(instruction):
     elif (instruction[0] == "tt"):
         arg = interprete_tt_arg(instruction[1])
         mouvements.turn_to(arg)
+    elif (instruction[0] == "goto"):
+        #Les déplacements sont fait dans l'interpreteur
+        interprete_goto_arg(instruction[1:],table)
+
     else:
         print("Instruction inconnue : {}".format(instruction))
 
 def interprete_init_arg(args):
-    return(int(args[1]),int(args[3]),int(args[5]))
+    return(int(float(args[1])),int(float(args[3])),int(float(args[5])))
 
 def interprete_av_arg(arg):
-    return(int(arg))
+    return(float(arg))
 
 def interprete_tt_arg(arg):
     # TODO Evidement changer ca
@@ -55,6 +61,44 @@ def interprete_tt_arg(arg):
             return (float(arg))
 
     return(float(arg))
+
+def interprete_goto_arg(args,table):
+    start = "{},{}".format(int(float(table.codeuses[0])),int(float(table.codeuses[1])))
+    goal = "{},{}".format(int(float(args[1])),int(float(args[3])))
+    path = graph.find_shortest_path(start,goal,table.graph)
+    last_node = None
+    for node in path:
+        print("je dois aller de {} à {}".format(last_node,node))
+        last_node = node
+        node = node.split(",")
+
+
+
+        s = (table.codeuses[0],table.codeuses[1])
+        g = (float(node[0]),float(node[1]))
+
+        d = float(distance.euclidean(s, g))
+        print("je vais de {} à {}".format(s,g))
+        if (d != 0):
+
+            if(g[0]-s[0]==0 and g[1]-s[1]<0):
+                angle = -math.pi/2
+            elif (g[0] - s[0] == 0 and g[1] - s[1] > 0):
+                angle = math.pi / 2
+            elif (g[1] - s[1] == 0 and g[0] - s[0] < 0):
+                angle = -math.pi
+            elif (g[1] - s[1] == 0 and g[0] - s[0] > 0):
+                angle = math.pi
+            else:
+                angle = np.arctan((g[1]-s[1])/(g[0]-s[0]))
+                if(g[0]-s[0]<0):
+                    angle +=math.pi
+            mouvements.turn_to(angle)
+        mouvements.av(d)
+
+
+
+
 
 def homologation():
     ll.initiate_codeuses(300,510,0)

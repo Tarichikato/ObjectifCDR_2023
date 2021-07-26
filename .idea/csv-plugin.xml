@@ -17,6 +17,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\mouvements.py">
+          <value>
+            <Attribute>
+              <option name="separator" value=";" />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\position.py">
           <value>
             <Attribute>

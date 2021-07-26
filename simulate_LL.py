@@ -22,7 +22,7 @@ class SimulatedLL():
         _thread.start_new_thread(self.listen_HL_move, (3,))
         # _thread.start_new_thread(self.listen_HL_actions, (3,))
         _thread.start_new_thread(self.listen_HL_infos, (3,))
-        _thread.start_new_thread(self.tell_HL_codeuses, (0.1,))
+        _thread.start_new_thread(self.tell_HL_codeuses, (0,))
 
     def listen_HL_move(self,delay):
         l = 0
@@ -80,22 +80,24 @@ class SimulatedLL():
 
     def move_process(self,message):
         m = message.split("_")
-        if(m[0] == "av"):
-            l = int(m[1])
-            step = l / abs(l) * 5
-            for _ in range(abs(l) // 5):
+        '''if(m[0] == "av" and int(float(m[1])) != 0):
+            l = float(m[1])
+            step = l / abs(l) * 1
+            for _ in range(int(abs(l)) // 1):
                 self.x += math.cos(self.orientation)*int(step)
                 self.y += math.sin(self.orientation) * int(step)
-                time.sleep(0.01)
-            # Todo bouger de l'eventuel reliquat
-
+                #time.sleep(0.00001)
+            # Todo bouger de l'eventuel reliquat'''
+        if (m[0] == "av" and int(float(m[1])) != 0):
+            self.x += math.cos(self.orientation) * float(m[1])
+            self.y += math.sin(self.orientation) * float(m[1])
         if (m[0] == "tt"):
             self.orientation = float(m[1])
 
 
     def init_codeuses(self,last_message):
         last_message = last_message.split('_')
-        self.x = int(float(last_message[2]))
-        self.y = int(float(last_message[4]))
+        self.x = float(last_message[2])
+        self.y = float(last_message[4])
         self.orientation = float(last_message[6])
 
