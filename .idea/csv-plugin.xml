@@ -10,6 +10,20 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\display.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\graph.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\mapper.py">
           <value>
             <Attribute>

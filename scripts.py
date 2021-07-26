@@ -30,6 +30,8 @@ def translate_and_send(instruction,table):
     elif (instruction[0] == "tt"):
         arg = interprete_tt_arg(instruction[1])
         mouvements.turn_to(arg)
+    elif (instruction[0] == "sleep"):
+        time.sleep(float(instruction[1]))
     elif (instruction[0] == "goto"):
         #Les déplacements sont fait dans l'interpreteur
         interprete_goto_arg(instruction[1:],table)
@@ -74,8 +76,8 @@ def interprete_goto_arg(args,table):
 
 
 
-        s = (table.codeuses[0],table.codeuses[1])
-        g = (float(node[0]),float(node[1]))
+        s = (int(table.codeuses[0]),int(table.codeuses[1]))
+        g = (int(float(node[0])),int(float(node[1])))
 
         d = float(distance.euclidean(s, g))
         print("je vais de {} à {}".format(s,g))
@@ -86,9 +88,9 @@ def interprete_goto_arg(args,table):
             elif (g[0] - s[0] == 0 and g[1] - s[1] > 0):
                 angle = math.pi / 2
             elif (g[1] - s[1] == 0 and g[0] - s[0] < 0):
-                angle = -math.pi
-            elif (g[1] - s[1] == 0 and g[0] - s[0] > 0):
                 angle = math.pi
+            elif (g[1] - s[1] == 0 and g[0] - s[0] > 0):
+                angle = 0
             else:
                 angle = np.arctan((g[1]-s[1])/(g[0]-s[0]))
                 if(g[0]-s[0]<0):

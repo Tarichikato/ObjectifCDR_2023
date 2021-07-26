@@ -28,7 +28,7 @@ def initiate_codeuses(x,y,o):
             print("le HL a bien recu {}".format('init-codeuses_x_{}_y_{}_o_{}'.format(x,y,o)))
             return (0)
         f.close()
-        time.sleep(0.5)
+        #time.sleep(0.5)
 
 
 def av(l):

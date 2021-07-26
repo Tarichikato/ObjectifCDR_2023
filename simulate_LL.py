@@ -6,6 +6,7 @@ class SimulatedLL():
     def __init__(self):
         self.x = 1000
         self.y = 500
+        self.vitesse = 500 #On traverse la table en 6 secondes
         self.orientation = 0
         f = open("data/HLtoLL_move.txt", "w")
         f.write("")
@@ -80,17 +81,13 @@ class SimulatedLL():
 
     def move_process(self,message):
         m = message.split("_")
-        '''if(m[0] == "av" and int(float(m[1])) != 0):
-            l = float(m[1])
-            step = l / abs(l) * 1
-            for _ in range(int(abs(l)) // 1):
-                self.x += math.cos(self.orientation)*int(step)
-                self.y += math.sin(self.orientation) * int(step)
-                #time.sleep(0.00001)
-            # Todo bouger de l'eventuel reliquat'''
         if (m[0] == "av" and int(float(m[1])) != 0):
-            self.x += math.cos(self.orientation) * float(m[1])
-            self.y += math.sin(self.orientation) * float(m[1])
+            x= math.cos(self.orientation) * float(m[1])
+            y= math.sin(self.orientation) * float(m[1])
+            for _ in range (10):
+                self.x += x/10
+                self.y += y/10
+                time.sleep(float(m[1])/self.vitesse/10)
         if (m[0] == "tt"):
             self.orientation = float(m[1])
 

@@ -3,14 +3,18 @@ from collections import defaultdict
 
 def init_graph():
 
-    edges = [["750,250", "250,750"], ["750,250", "750,750"],
-        ["750,250", "1750,750"], ["250,750", "250,1250"],
-        ["250,750", "750,750"], ["1750,750", "1250,1250"],
-        ["1750,750", "1250,2250"], ["250,1250", "750,750"]]
+    edges = []
+
+    for k in range (3000//250):
+        for i in range (2000//250):
+            edges.append(["{},{}".format(k * 250, i * 250), "{},{}".format(k * 250, (i + 1) * 250)])
+            edges.append(["{},{}".format(k * 250, i * 250), "{},{}".format((k + 1) * 250, i * 250)])
+            edges.append(["{},{}".format(k*250,i*250),"{},{}".format((k+1)*250,(i+1)*250)])
+            edges.append(["{},{}".format(k * 250, i * 250), "{},{}".format((k + 1) * 250, (i-1) *250)])
     graph = defaultdict(list)
 
     # Loop to iterate over every
-    # edge of the graph
+    # edge of the graphq
     for edge in edges:
         a, b = edge[0], edge[1]
 

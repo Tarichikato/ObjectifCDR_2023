@@ -7,10 +7,13 @@ import lidar
 import graph as g
 import _thread
 import time
+from scipy.spatial import distance
+
 
 class Table():
     def __init__(self):
         self.graph = self.build_graph()
+
         print(self.graph)
         g.find_shortest_path('250,1250', '1250,1250',self.graph)
         self.bd = self.get_balise_data()
@@ -23,7 +26,6 @@ class Table():
     def keep_table_updated(self,delay):
         while True:
             self.update_table()
-            #print(self.bd)
             time.sleep(delay)
 
     def update_table(self):
@@ -86,5 +88,21 @@ class Table():
         return None
 
     def update_graph(self):
-        #Todo Faire l'update
-        return(self.graph)
+        graph = self.build_graph()
+        to_pop = []
+        for _edge in graph:
+            edge = _edge.split(',')
+            p = (int(edge[0]), int(edge[1]))
+            if(distance.euclidean(p, self.bd['enemy_1']) < 150*2):
+                to_pop.append(_edge)
+        for e in to_pop:
+            graph.pop(e)
+        for _edge in graph:
+            tp= []
+            for k in range (len(graph[_edge])):
+                if(graph[_edge][k] in to_pop):
+                    tp+=[graph[_edge][k]]
+            for k in tp:
+                graph[_edge].remove(k)
+        return (graph)
+
