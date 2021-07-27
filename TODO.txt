@@ -1,0 +1,6 @@
+
+PRIORITE
+
+Gerer le problème du choix des chemins.
+Il faut que la diagonale soit moins attractive que 1 droite mais plus attractive que 2 droites.
+Leur mettre un poids de racine de 2 serait une solution.
