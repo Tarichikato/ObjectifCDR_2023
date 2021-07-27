@@ -4,7 +4,9 @@ import numpy as np
 import time
 import talkToLL as ll
 import get_config as gc
-import graph as graph
+import graph2 as graph
+
+import copy
 from scipy.spatial import distance
 
 
@@ -73,24 +75,31 @@ def interprete_goto_arg(args,table):
     if(table.codeuses[0] % 250 != 0 or table.codeuses[1] % 250 != 0):
         x = round(table.codeuses[0]/250)*250
         y = round(table.codeuses[1] / 250) * 250
-        start = "{},{}".format(int(x), int(y))
+        start = (int(x), int(y))
     else:
-        start = "{},{}".format(int(table.codeuses[0]),int(table.codeuses[1]))
-    goal = "{},{}".format(int(args[1]),int(args[3]))
-    path = graph.find_shortest_path(start,goal,table.graph)
+        start = (int(table.codeuses[0]),int(table.codeuses[1]))
+    goal = (int(args[1]),int(args[3]))
+
+    path = graph.find_shortest_path(start,goal,table.graph,table.nodes)
     last_node = None
+    last_angle = None
+    instructions = []
     if(path != None):
         path = path[1:]
+        print(path)
+        last_node = None
         for node in path:
             #print("je dois aller de {} à {}".format(last_node,node))
-            last_node = node
-            node = node.split(",")
 
 
 
-
-            s = (int(table.codeuses[0]),int(table.codeuses[1]))
+            if (last_node == None):
+                s = (int(table.codeuses[0]),int(table.codeuses[1]))
+            else:
+                s = (int(last_node[0]), int(last_node[1]))
             g = (int(node[0]),int(node[1]))
+            last_node = node
+
 
             d = int(distance.euclidean(s, g))
             #print("je vais de {} à {}".format(s,g))
@@ -108,8 +117,11 @@ def interprete_goto_arg(args,table):
                     angle = np.arctan((g[1]-s[1])/(g[0]-s[0]))
                     if(g[0]-s[0]<0):
                         angle +=math.pi
-                mouvements.turn_to(angle)
-            mouvements.av(d)
+                if (last_angle != angle):
+                    instructions.append("tt_{}".format(angle))
+                    last_angle = angle
+            instructions.append("av_{}".format(d))
+        execute__mouvement_instruction_list(instructions)
 
     else:
         print("Je trouve pas de chemin")
@@ -117,6 +129,26 @@ def interprete_goto_arg(args,table):
         time.sleep(2)
 
         interprete_goto_arg(args, table)
+
+def execute__mouvement_instruction_list(list):
+    i = 0
+    while(i<len(list)):
+        inst = list[i]
+        if(inst[0] == 't'):
+            order = inst.split('_')
+            mouvements.turn_to(float(order[1]))
+            i+=1
+        elif(inst[0] == 'a'):
+            d = 0
+            while(i<len(list) and list[i][0] == 'a' ):
+                inst = list[i]
+                order = inst.split('_')
+                d+=int(order[1])
+                i+=1
+            mouvements.av(d)
+
+
+
 
 
 

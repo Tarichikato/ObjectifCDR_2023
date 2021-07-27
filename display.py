@@ -70,8 +70,24 @@ def stream_table(table):
 
 def display_graph(img,table):
     _graph = table.graph
-    graph = copy.deepcopy(_graph)
-    for edge in graph:
+    _nodes = table.nodes
+    adj = copy.deepcopy(_graph)
+    nodes = copy.deepcopy(_nodes)
+    for node in nodes:
+        e = table.scale(img.shape, node)
+        cv2.circle(img, e, 5, (0, 0, 0), -1)
+
+    lineThickness = 1
+
+    for k in range (len(adj)):
+        for i in range (len(adj[k])):
+            if(adj[k][i] != 0):
+                e1 = table.scale(img.shape, nodes[k])
+                e2 = table.scale(img.shape, nodes[i])
+                cv2.line(img, e1, e2, (0, 0, 0), lineThickness)
+
+
+    '''for edge in graph:
         _edge = edge.split(',')
         e = table.scale(img.shape, (int(_edge[0]),int(_edge[1])))
         if(int(_edge[0])==1000 and int(_edge[1])==1000):
@@ -84,4 +100,4 @@ def display_graph(img,table):
         for point in graph[edge]:
             point = point.split(',')
             p = table.scale(img.shape, (int(point[0]), int(point[1])))
-            cv2.line(img, e, p, (0, 0, 0), lineThickness)
+            cv2.line(img, e, p, (0, 0, 0), lineThickness)'''

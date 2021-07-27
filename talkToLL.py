@@ -47,6 +47,7 @@ def send(order,a):
         #print("Le HL envoie {}".format("{}_{}\n".format(order,a)))
         f.write("{}_{}\n".format(order,a))
         f.close
+        #TODO gerer les cas ou le LL répond pas
         for k in range(20):
             f = open("data/LLtoHL_move.txt", "r")
             message = f.readlines()
@@ -55,5 +56,5 @@ def send(order,a):
                 #print("le HL a bien recu {}".format("{}_{}\n".format(order,a)))
                 return (0)
             f.close()
-            time.sleep(0.2)
+            time.sleep(0.5) #Comme ca on attend au pire 10s
 

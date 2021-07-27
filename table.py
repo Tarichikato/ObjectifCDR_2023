@@ -8,11 +8,12 @@ import graph as g
 import _thread
 import time
 from scipy.spatial import distance
+import graph2 as g2
 
 
 class Table():
     def __init__(self):
-        self.graph = self.build_graph()
+        self.graph, self.nodes = self.build_graph()
         self.bd = self.get_balise_data()
         self.cam = self.get_camera_data()
         self.codeuses = (0, 0, 0)
@@ -29,7 +30,7 @@ class Table():
         self.bd = self.get_balise_data()
         self.lidar = lidar.get_map()
         self.cam = self.get_camera_data()
-        self.graph = self.update_graph()
+        #_,self.nodes = self.update_graph()
         self.codeuses = self.get_codeuses_data()
 
 
@@ -71,8 +72,8 @@ class Table():
         return (map)
 
     def build_graph(self):
-        graph = g.init_graph()
-        return (graph)
+        graph,nodes = g2.init_graph()
+        return (graph,nodes)
 
     def get_elements(self):
         #Todo lister les élémnts présents et leur position
