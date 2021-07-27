@@ -74,7 +74,10 @@ def display_graph(img,table):
     for edge in graph:
         _edge = edge.split(',')
         e = table.scale(img.shape, (int(_edge[0]),int(_edge[1])))
-        cv2.circle(img, e, 5, (0, 0, 0), -1)
+        if(int(_edge[0])==1000 and int(_edge[1])==1000):
+            cv2.circle(img, e, 5, (255, 0, 0), -1)
+        else:
+            cv2.circle(img, e, 5, (0, 0, 0), -1)
 
 
         lineThickness = 1

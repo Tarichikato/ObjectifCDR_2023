@@ -14,6 +14,7 @@ def execute_script(table):
     script = f.readlines()
     f.close()
     for instruction in script:
+        print("instruction = {}".format(instruction))
         translate_and_send(instruction,table)
 
 def translate_and_send(instruction,table):
@@ -22,16 +23,19 @@ def translate_and_send(instruction,table):
     if(instruction[0] == "init-position"):
         x,y,o = interprete_init_arg(instruction[1:])
         ll.initiate_codeuses(x,y,o)
+        while(table.codeuses != (x,y,o)):
+            table.update_table()
+        print("Codeuses initialisées pour la table. Table truth : {}. Init : {}".format(table.codeuses,(x,y,o)))
     elif(instruction[0] == "av"):
         arg = interprete_av_arg(instruction[1])
         mouvements.av(arg)
     elif (instruction[0] == "wait"):
-        time.sleep(float(instruction[1]))
+        time.sleep(int(instruction[1]))
     elif (instruction[0] == "tt"):
         arg = interprete_tt_arg(instruction[1])
         mouvements.turn_to(arg)
     elif (instruction[0] == "sleep"):
-        time.sleep(float(instruction[1]))
+        time.sleep(int(instruction[1]))
     elif (instruction[0] == "goto"):
         #Les déplacements sont fait dans l'interpreteur
         interprete_goto_arg(instruction[1:],table)
@@ -40,10 +44,10 @@ def translate_and_send(instruction,table):
         print("Instruction inconnue : {}".format(instruction))
 
 def interprete_init_arg(args):
-    return(int(float(args[1])),int(float(args[3])),int(float(args[5])))
+    return(int(args[1]),int(args[3]),int(args[5]))
 
 def interprete_av_arg(arg):
-    return(float(arg))
+    return(int(arg))
 
 def interprete_tt_arg(arg):
     # TODO Evidement changer ca
@@ -65,38 +69,47 @@ def interprete_tt_arg(arg):
     return(float(arg))
 
 def interprete_goto_arg(args,table):
-    start = "{},{}".format(int(float(table.codeuses[0])),int(float(table.codeuses[1])))
-    goal = "{},{}".format(int(float(args[1])),int(float(args[3])))
+    start = "{},{}".format(int(table.codeuses[0]),int(table.codeuses[1]))
+    goal = "{},{}".format(int(args[1]),int(args[3]))
     path = graph.find_shortest_path(start,goal,table.graph)
     last_node = None
-    for node in path:
-        print("je dois aller de {} à {}".format(last_node,node))
-        last_node = node
-        node = node.split(",")
+    if(path != None):
+        path = path[1:]
+        for node in path:
+            #print("je dois aller de {} à {}".format(last_node,node))
+            last_node = node
+            node = node.split(",")
 
 
 
-        s = (int(table.codeuses[0]),int(table.codeuses[1]))
-        g = (int(float(node[0])),int(float(node[1])))
 
-        d = float(distance.euclidean(s, g))
-        print("je vais de {} à {}".format(s,g))
-        if (d != 0):
+            s = (int(table.codeuses[0]),int(table.codeuses[1]))
+            g = (int(node[0]),int(node[1]))
 
-            if(g[0]-s[0]==0 and g[1]-s[1]<0):
-                angle = -math.pi/2
-            elif (g[0] - s[0] == 0 and g[1] - s[1] > 0):
-                angle = math.pi / 2
-            elif (g[1] - s[1] == 0 and g[0] - s[0] < 0):
-                angle = math.pi
-            elif (g[1] - s[1] == 0 and g[0] - s[0] > 0):
-                angle = 0
-            else:
-                angle = np.arctan((g[1]-s[1])/(g[0]-s[0]))
-                if(g[0]-s[0]<0):
-                    angle +=math.pi
-            mouvements.turn_to(angle)
-        mouvements.av(d)
+            d = int(distance.euclidean(s, g))
+            #print("je vais de {} à {}".format(s,g))
+            if (d != 0):
+
+                if(g[0]-s[0]==0 and g[1]-s[1]<0):
+                    angle = -math.pi/2
+                elif (g[0] - s[0] == 0 and g[1] - s[1] > 0):
+                    angle = math.pi / 2
+                elif (g[1] - s[1] == 0 and g[0] - s[0] < 0):
+                    angle = math.pi
+                elif (g[1] - s[1] == 0 and g[0] - s[0] > 0):
+                    angle = 0
+                else:
+                    angle = np.arctan((g[1]-s[1])/(g[0]-s[0]))
+                    if(g[0]-s[0]<0):
+                        angle +=math.pi
+                mouvements.turn_to(angle)
+            mouvements.av(d)
+
+    else:
+        print("Je trouve pas de chemin")
+        time.sleep(2)
+        interprete_goto_arg(args, table)
+
 
 
 

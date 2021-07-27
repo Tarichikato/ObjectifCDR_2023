@@ -59,7 +59,7 @@ def find_shortest_path(start,goal,graph):
                 # Condition to check if the
                 # neighbour node is the goal
                 if neighbour == goal:
-                    print("Shortest path = ", *new_path)
+                    print("Shortest path ={} , start = {}, goal = {}".format(new_path,start,goal))
                     return(new_path)
             explored.append(node)
 

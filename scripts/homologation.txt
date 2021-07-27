@@ -1,5 +1,8 @@
 init-position_x_250_y_1250_o_0
 goto_x_1250_y_1250
-sleep_1
+goto_x_1000_y_1000
 goto_x_2000_y_2000
-sleep_3
+goto_x_1000_y_1000
+goto_x_0_y_2000
+goto_x_3000_y_0
+sleep_5

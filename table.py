@@ -13,15 +13,12 @@ from scipy.spatial import distance
 class Table():
     def __init__(self):
         self.graph = self.build_graph()
-
-        print(self.graph)
-        g.find_shortest_path('250,1250', '1250,1250',self.graph)
         self.bd = self.get_balise_data()
         self.cam = self.get_camera_data()
         self.codeuses = (0, 0, 0)
         self.codeuses = self.get_codeuses_data()
 
-        _thread.start_new_thread(self.keep_table_updated, (0.1,))
+        _thread.start_new_thread(self.keep_table_updated, (0.01,))
 
     def keep_table_updated(self,delay):
         while True:
@@ -57,7 +54,7 @@ class Table():
         data = ll.get_position_odometrie()
         if(len(data)!=6):
             return(self.codeuses)
-        return(float(data[1]),float(data[3]),float(data[5]))
+        return(int(data[1]),int(data[3]),float(data[5]))
 
     def scale(self,shape, position):
         return (int(position[0] / 3000 * shape[1]), int(position[1] / 2000 * shape[0]))
