@@ -69,7 +69,13 @@ def interprete_tt_arg(arg):
     return(float(arg))
 
 def interprete_goto_arg(args,table):
-    start = "{},{}".format(int(table.codeuses[0]),int(table.codeuses[1]))
+    #TODO Regler le problème de si on est pas sur un noeud du graph
+    if(table.codeuses[0] % 250 != 0 or table.codeuses[1] % 250 != 0):
+        x = round(table.codeuses[0]/250)*250
+        y = round(table.codeuses[1] / 250) * 250
+        start = "{},{}".format(int(x), int(y))
+    else:
+        start = "{},{}".format(int(table.codeuses[0]),int(table.codeuses[1]))
     goal = "{},{}".format(int(args[1]),int(args[3]))
     path = graph.find_shortest_path(start,goal,table.graph)
     last_node = None
@@ -107,7 +113,9 @@ def interprete_goto_arg(args,table):
 
     else:
         print("Je trouve pas de chemin")
+        print("je dois aller de {} à {}".format(start, goal))
         time.sleep(2)
+
         interprete_goto_arg(args, table)
 
 

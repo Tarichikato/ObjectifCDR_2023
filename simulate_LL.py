@@ -84,14 +84,14 @@ class SimulatedLL():
         if (m[0] == "av" and int(m[1]) != 0):
             x= math.cos(self.orientation) * int(m[1])
             y= math.sin(self.orientation) * int(m[1])
+            _x,_y = self.x,self.y
             for _ in range (10):
                 self.x += int(x/10)
                 self.y += int(y/10)
                 time.sleep(int(m[1])/self.vitesse/10)
-            self.x += int(x - (int(x/10)*10))
-            self.y += int(y - (int(y/10)*10))
-            #print("On setait décalé de {} {}".format(x - (int(x/10)*10),y - (int(y/10)*10)))
-            #print(self.x,self.y)
+            #C'est bien joli d'avancer doucement mais bon..
+            self.x = _x + int(x)
+            self.y = _y + int(y)
         if (m[0] == "tt"):
             self.orientation = float(m[1])
 

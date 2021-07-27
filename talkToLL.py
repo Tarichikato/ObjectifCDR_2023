@@ -55,5 +55,5 @@ def send(order,a):
                 #print("le HL a bien recu {}".format("{}_{}\n".format(order,a)))
                 return (0)
             f.close()
-            time.sleep(0.5)
+            time.sleep(0.2)
 
