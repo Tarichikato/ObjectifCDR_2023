@@ -7,6 +7,7 @@ import lidar
 import graph as g
 import _thread
 import time
+import math
 from scipy.spatial import distance
 import graph2 as g2
 
@@ -14,12 +15,21 @@ import graph2 as g2
 class Table():
     def __init__(self):
         self.graph, self.nodes = self.build_graph()
+        print("Graph créé")
         self.bd = self.get_balise_data()
         self.cam = self.get_camera_data()
         self.codeuses = (0, 0, 0)
         self.codeuses = self.get_codeuses_data()
 
         _thread.start_new_thread(self.keep_table_updated, (0.01,))
+        _thread.start_new_thread(self.simulate_mouv, (0.5,))
+
+    def simulate_mouv(self,delay):
+        while True:
+            #self.bd = self.get_balise_data()
+            e = (self.bd['enemy_1'][0],(self.bd['enemy_1'][1]-100)%2000)
+            self.bd['enemy_1'] = e
+            time.sleep(delay)
 
     def keep_table_updated(self,delay):
         while True:
@@ -27,10 +37,10 @@ class Table():
             time.sleep(delay)
 
     def update_table(self):
-        self.bd = self.get_balise_data()
+        #self.bd = self.get_balise_data()
         self.lidar = lidar.get_map()
         self.cam = self.get_camera_data()
-        #_,self.nodes = self.update_graph()
+        self.graph,self.nodes = self.update_graph()
         self.codeuses = self.get_codeuses_data()
 
 
@@ -86,21 +96,86 @@ class Table():
         return None
 
     def update_graph(self):
-        graph = self.build_graph()
-        to_pop = []
-        for _edge in graph:
-            edge = _edge.split(',')
-            p = (int(edge[0]), int(edge[1]))
-            if(distance.euclidean(p, self.bd['enemy_1']) < 150*2):
-                to_pop.append(_edge)
-        for e in to_pop:
-            graph.pop(e)
-        for _edge in graph:
-            tp= []
-            for k in range (len(graph[_edge])):
-                if(graph[_edge][k] in to_pop):
-                    tp+=[graph[_edge][k]]
-            for k in tp:
-                graph[_edge].remove(k)
-        return (graph)
+        adj,nodes = self.build_graph()
+        p = self.bd['enemy_1']
+        #print(p)
+        for k in range (len(adj)):
+            for i in range (len(adj[k])):
+                if(adj[k][i]!= 0):
+                    if(self.intercect(p,nodes[k],nodes[i],2*150)):
+                        adj[k][i] = 0
+        return (adj,nodes)
+
+    def intercect(self,p,d1,d2,l):
+        '''if(int((d1[0]-d2[0])) != 0):
+            if (int((d1[1] - d2[1])) != 0):
+                a = (d1[1]-d2[1])/(d1[0]-d2[0])
+                b = d1[1] - a*d1[0]
+                d = abs(a*p[0]+b-p[1])/math.sqrt(a*a+1)
+            else: d = abs(d1[1]-p[1])
+        else:
+            d = abs(d1[0]-p[0])'''
+
+        d = self.minDistance(d1, d2, p)
+
+        if(d<= l):
+            #print(d,d1,d2,p)
+            return(True)
+        else:
+            return(False)
+
+    def minDistance(self,A, B, E):
+
+        # vector AB
+        AB = [None, None];
+        AB[0] = B[0] - A[0];
+        AB[1] = B[1] - A[1];
+
+        # vector BP
+        BE = [None, None];
+        BE[0] = E[0] - B[0];
+        BE[1] = E[1] - B[1];
+
+        # vector AP
+        AE = [None, None];
+        AE[0] = E[0] - A[0];
+        AE[1] = E[1] - A[1];
+
+        # Variables to store dot product
+
+        # Calculating the dot product
+        AB_BE = AB[0] * BE[0] + AB[1] * BE[1];
+        AB_AE = AB[0] * AE[0] + AB[1] * AE[1];
+
+        # Minimum distance from
+        # point E to the line segment
+        reqAns = 0;
+
+        # Case 1
+        if (AB_BE > 0):
+
+            # Finding the magnitude
+            y = E[1] - B[1];
+            x = E[0] - B[0];
+            reqAns = math.sqrt(x * x + y * y);
+
+        # Case 2
+        elif (AB_AE < 0):
+            y = E[1] - A[1];
+            x = E[0] - A[0];
+            reqAns = math.sqrt(x * x + y * y);
+
+        # Case 3
+        else:
+
+            # Finding the perpendicular distance
+            x1 = AB[0];
+            y1 = AB[1];
+            x2 = AE[0];
+            y2 = AE[1];
+            mod = math.sqrt(x1 * x1 + y1 * y1);
+            reqAns = abs(x1 * y2 - y1 * x2) / mod;
+
+        return reqAns;
+
 

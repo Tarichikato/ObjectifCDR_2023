@@ -106,9 +106,14 @@ class Graph:
             # from the set of vertices
             # still in queue
             u = self.minDistance(dist, queue)
+            if(u == -1):
+                break
+            #print(u)
 
             # remove min element
-            queue.remove(u)
+            #print(u)
+            if u in (queue):
+                queue.remove(u)
 
             # Update dist value and parent
             # index of the adjacent vertices of
@@ -137,8 +142,6 @@ def find_shortest_path(start,goal,adj,nodes):
     g = Graph()
     g.dijkstra(adj,s,go)
     p = []
-    print(s,go)
-    print(g.path)
     for n in g.path:
         p+=[nodes[n]]
     return(p)

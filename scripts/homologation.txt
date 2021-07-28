@@ -1,5 +1,4 @@
-init-position_x_250_y_1250_o_0
-goto_x_1250_y_1250
+init-position_x_2000_y_2000_o_0
 goto_x_1000_y_1000
 goto_x_2000_y_2000
 goto_x_1000_y_1000

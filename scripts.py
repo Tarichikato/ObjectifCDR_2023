@@ -16,7 +16,7 @@ def execute_script(table):
     script = f.readlines()
     f.close()
     for instruction in script:
-        print("instruction = {}".format(instruction))
+        #print("instruction = {}".format(instruction))
         translate_and_send(instruction,table)
 
 def translate_and_send(instruction,table):
@@ -86,7 +86,7 @@ def interprete_goto_arg(args,table):
     instructions = []
     if(path != None):
         path = path[1:]
-        print(path)
+        #print(path)
         last_node = None
         for node in path:
             #print("je dois aller de {} à {}".format(last_node,node))
