@@ -14,6 +14,7 @@ import graph2 as g2
 
 class Table():
     def __init__(self):
+        self.fixed_obstacles = self.init_fixed_obstacles()
         self.graph, self.nodes = self.build_graph()
         print("Graph créé")
         self.bd = self.get_balise_data()
@@ -81,9 +82,38 @@ class Table():
         map = {'graph': graph,'elements':elements,'config':config}
         return (map)
 
+    def init_fixed_obstacles(self):
+        robot_ray = 150
+        fixed_obstacles = []
+        fixed_obstacles.append({'type': 'rectangle','info':[(0,0),(3000,robot_ray)]})
+        fixed_obstacles.append({'type': 'rectangle','info':[(0,0),(robot_ray,2000)]})
+        fixed_obstacles.append({'type': 'rectangle','info':[(0,2000),(3000,2000-robot_ray)]})
+        fixed_obstacles.append({'type': 'rectangle','info':[(3000,2000),(3000-robot_ray,0)]})
+        return(fixed_obstacles)
+
     def build_graph(self):
-        graph,nodes = g2.init_graph()
-        return (graph,nodes)
+        adj,nodes = g2.init_graph()
+        for k in range(len(nodes)) :
+            #TODO gerer le problème où c'est juste une arrète qui traverse
+            if(self.is_in(nodes[k],self.fixed_obstacles)):
+                for j in range (len(adj[k])):
+                    if(adj[k][j] != 0):
+                        adj[k][j] = 0
+                        adj[j][k] = 0
+
+
+        return (adj,nodes)
+
+    def is_in(self,pt,obstacles):
+        for obstacle in obstacles:
+            if (obstacle['type'] == 'rectangle'):
+                a = obstacle['info'][0]
+                b = obstacle['info'][1]
+                if(pt[0]>= a[0] and pt[0]<= b[0] or pt[0] <= a[0] and pt[0] >= b[0]):
+                    if(pt[1]>= a[1] and pt[1]<= b[1] or pt[1] <= a[1] and pt[1] >= b[1]):
+                        return (True)
+        return(False)
+
 
     def get_elements(self):
         #Todo lister les élémnts présents et leur position

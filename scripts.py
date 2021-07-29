@@ -81,11 +81,15 @@ def interprete_goto_arg(args,table):
     goal = (int(args[1]),int(args[3]))
 
     path = graph.find_shortest_path(start,goal,table.graph,table.nodes)
+    print(path)
+    if(len(path)==1):
+        if (path[0] != start):
+            path = None
     last_node = None
     last_angle = None
     instructions = []
     if(path != None):
-        path = path[1:]
+        #path = path[1:]
         #print(path)
         last_node = None
         for node in path:
