@@ -38,6 +38,14 @@ def av(l):
 def tt(o):
     send('tt',o)
 
+def update_right_to_move(right):
+    f = open("data/HLtoLL_right_to_move.txt", "w")
+    if(right):
+        f.write("{}".format(right))
+    else:
+        f.write("")
+    f.close()
+
 def send(order,a):
     if (gc.is_ll_simulated()):
         f = open("data/LLtoHL_move.txt", "r")
@@ -47,6 +55,7 @@ def send(order,a):
         #print("Le HL envoie {}".format("{}_{}\n".format(order,a)))
         f.write("{}_{}\n".format(order,a))
         f.close
+        #TODO gerer les cas ou le LL répond pas
         for k in range(20):
             f = open("data/LLtoHL_move.txt", "r")
             message = f.readlines()
@@ -55,5 +64,5 @@ def send(order,a):
                 #print("le HL a bien recu {}".format("{}_{}\n".format(order,a)))
                 return (0)
             f.close()
-            time.sleep(0.2)
+            time.sleep(0.5) #Comme ca on attend au pire 10s
 

@@ -3,7 +3,9 @@ import time
 import math
 
 class SimulatedLL():
+
     def __init__(self):
+        self.right_to_move = False
         self.x = 0
         self.y = 0
         self.vitesse = 500 #On traverse la table en 6 secondes
@@ -20,10 +22,21 @@ class SimulatedLL():
         f = open("data/LLtoHL_info.txt", "w")
         f.write("")
         f.close()
+        _thread.start_new_thread(self.listen_HL_right_to_move, (0.01,))
         _thread.start_new_thread(self.listen_HL_infos, (3,))
         _thread.start_new_thread(self.listen_HL_move, (3,))
         # _thread.start_new_thread(self.listen_HL_actions, (3,))
         _thread.start_new_thread(self.tell_HL_codeuses, (0,))
+
+    def listen_HL_right_to_move(self,delay):
+        while True:
+            f = open("data/HLtoLL_right_to_move.txt", "r")
+            right = f.read()
+            f.close()
+            self.right_to_move = bool(right)
+            time.sleep(delay)
+
+
 
     def listen_HL_move(self,delay):
         l = 0
@@ -86,6 +99,9 @@ class SimulatedLL():
             y= math.sin(self.orientation) * int(m[1])
             _x,_y = self.x,self.y
             for _ in range (10):
+                while not self.right_to_move:
+                    print("Je ne peux pas bouger")
+                    time.sleep(1)
                 self.x += int(x/10)
                 self.y += int(y/10)
                 time.sleep(int(m[1])/self.vitesse/10)

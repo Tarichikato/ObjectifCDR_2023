@@ -1,6 +1,6 @@
 
 PRIORITE
 
-Gerer le problème du choix des chemins.
-Il faut que la diagonale soit moins attractive que 1 droite mais plus attractive que 2 droites.
-Leur mettre un poids de racine de 2 serait une solution.
+Evitement ok mais faut voir à quel moment on recalcule le graph parce que là on évite des obstacles immaginaires
+Peut etre ne pas update le graph en fonction des obstacles mobiles et les prendre en compte que si on les rencontre
+Là on update le graph en les prenant en compte et on calcule un nouveau chemin avant de reprndre le graph sans les moving obstacles

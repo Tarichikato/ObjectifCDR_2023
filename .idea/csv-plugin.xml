@@ -24,6 +24,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\graph2.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\mapper.py">
           <value>
             <Attribute>
@@ -46,6 +53,13 @@
           </value>
         </entry>
         <entry key="\scripts.py">
+          <value>
+            <Attribute>
+              <option name="separator" value=":" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\table.py">
           <value>
             <Attribute>
               <option name="separator" value=":" />
