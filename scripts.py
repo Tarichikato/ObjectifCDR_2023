@@ -10,6 +10,8 @@ import copy
 from scipy.spatial import distance
 
 
+
+
 def execute_script(table):
     script = gc.get_script()
     f = open(script, "r")
@@ -28,6 +30,7 @@ def translate_and_send(instruction,table):
         while(table.codeuses != (x,y,o)):
             table.update_table()
         print("Codeuses initialisées pour la table. Table truth : {}. Init : {}".format(table.codeuses,(x,y,o)))
+        ll.update_right_to_move(True)
     elif(instruction[0] == "av"):
         arg = interprete_av_arg(instruction[1])
         mouvements.av(arg)
@@ -126,6 +129,7 @@ def interprete_goto_arg(args,table):
                     last_angle = angle
             instructions.append("av_{}".format(d))
         execute__mouvement_instruction_list(instructions)
+
 
     else:
         print("Je trouve pas de chemin")

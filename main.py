@@ -15,7 +15,7 @@ if __name__ == '__main__':
     ll = SimulatedLL()
     table = Table()
     print("End of init table")
-    robot = Robot()
+    robot = Robot(table)
 
 
 

@@ -38,6 +38,14 @@ def av(l):
 def tt(o):
     send('tt',o)
 
+def update_right_to_move(right):
+    f = open("data/HLtoLL_right_to_move.txt", "w")
+    if(right):
+        f.write("{}".format(right))
+    else:
+        f.write("")
+    f.close()
+
 def send(order,a):
     if (gc.is_ll_simulated()):
         f = open("data/LLtoHL_move.txt", "r")
